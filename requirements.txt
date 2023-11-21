@@ -2,4 +2,4 @@ requests
 selenium
 beautifulsoup4
 numpy
-webdriver-manager
+py-pdf-parser

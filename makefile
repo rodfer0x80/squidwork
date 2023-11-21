@@ -1,4 +1,4 @@
-.PHONY: build run clean 
+.PHONY: build run clean
 
 build:
 	@echo "Building..."
@@ -11,4 +11,3 @@ run: build
 clean:
 	@echo "Cleaning..."
 	@./scripts/clean.sh
-

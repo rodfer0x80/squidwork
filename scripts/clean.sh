@@ -1,3 +1,4 @@
 #!/bin/sh
 
-rm -rf $PWD/.venv ~/.cache/squidwork/* $PWD/**/__pycache__ $PWD/**/*/__pycache__
+WORKDIR="$XDG_CACHE_HOME/squidwork"
+rm -rf $WORKDIR/* $PWD/**/__pycache__ $PWD/**/*/__pycache__
