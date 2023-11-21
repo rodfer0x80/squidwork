@@ -1,6 +1,7 @@
 #!/bin/sh
 
-test -e "$PWD/.venv" ||\
-    /usr/bin/python3 -m venv "$PWD/.venv" &&\
-    "$PWD/.venv/bin/python" -m pip install --upgrade pip &&\
-    "$PWD/.venv/bin/python" -m pip install -r "$PWD/requirements.txt"
+WORKDIR="$XDG_CACHE_HOME/squidwork"
+test -e $WORKDIR/.venv ||\
+    /usr/bin/python3 -m venv $WORKDIR/.venv &&\
+    $WORKDIR/.venv/bin/python -m pip install --upgrade pip &&\
+    $WORKDIR/.venv/bin/python -m pip install -r $PWD/requirements.txt
