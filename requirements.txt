@@ -2,4 +2,3 @@ requests
 selenium
 beautifulsoup4
 numpy
-webdriver-manager

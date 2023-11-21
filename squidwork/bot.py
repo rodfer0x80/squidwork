@@ -14,7 +14,7 @@ class Bot:
         self.logger = LoggerToLogfile(self.cache_dir)
         # TODO: read from batch file or single string target
         self.target = "https://google.com"
-        self.headless = True if os.getenv("HEADLESS", "0") else False
+        self.headless = True if os.getenv("HEADLESS", "0") == "1" else False
         self.browser = DefaultChromeDriver(
             target=self.target, cache_dir=self.cache_dir, headless=self.headless).getBrowser()
         self.actions = Actions(self.browser, self.logger)
