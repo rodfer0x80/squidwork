@@ -1,5 +1,6 @@
 from squidwork.bot import Bot
 
+import os
 import sys
 import time
 
@@ -20,6 +21,7 @@ class mainBot(Bot):
 
 
 def main():
+    os.environ["HEADLESS"] = "0"
     mainBot()()
     return 0
 
