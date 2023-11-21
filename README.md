@@ -1,2 +1,3 @@
 # squidwork
-> Browser automation is the way to build cool AI products
+squikwork aims to be the best browser automation tool
+soon we will power local attention and vision agents
