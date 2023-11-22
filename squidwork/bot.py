@@ -12,11 +12,11 @@ class Bot:
             os.getenv("XDG_HOME_CACHE", "~/.cache"))),  "squidwork"))
         os.makedirs(self.cache_dir, exist_ok=True)
         self.logger = LoggerToLogfile(self.cache_dir)
-        # TODO: read from batch file or single string target
+        # TODO: read from batch file or single string target #2
         self.headless = True if os.getenv("HEADLESS", "0") == "1" else False
         self.browser = DefaultChromeDriver(cache_dir=self.cache_dir, headless=self.headless).getBrowser()
         self.actions = Actions(self.browser, self.logger)
-        # TODO: fix this
+        # TODO: fix this load from ~/.cache/squidwork/data #1
         self.session = requests.Session()
 
 
@@ -24,11 +24,10 @@ class Bot:
         self.openBrowser()
         time.sleep(0.1)
 
-    # TODO: fix this ? load from ~/.cache/data
-    # TODO: we investigate
+    # TODO: we investigate #1
     def addCookiesToSession(self):
         try:
-            # TODO: implement this
+            # TODO: implement this #1
             cookies = self.browser.get_cookies()
         except AttributeError:
             return 1

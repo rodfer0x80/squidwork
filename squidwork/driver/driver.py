@@ -1,5 +1,5 @@
 class Driver:
-    def __init__(self, headless=True):
+    def __init__(self, headless):
         self.options = None
         self.service = None
         self.headless = headless
