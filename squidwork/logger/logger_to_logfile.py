@@ -9,8 +9,9 @@ class LoggerToLogfile(Logger):
     def __init__(self, cache_dir):
         super().__init__()
         self.cache_dir = cache_dir
-        self.logfile = Path(os.path.join(self.cache_dir, "squidwork.log"))
-        self.backupOldRunLogfile()
+        curr_date = datetime.now().strftime("%H-%M-%S_%d-%m-%Y")
+        self.logfile = Path(os.path.join(self.cache_dir, f"squidwork_{curr_date}.log"))
+        #self.backupOldRunLogfile()
 
         logging.basicConfig(
             level=logging.DEBUG,
@@ -19,20 +20,20 @@ class LoggerToLogfile(Logger):
             filename=self.logfile
         )
 
-    def backupOldRunLogfile(self):
-        curr_date = datetime.now().strftime("%S-%M-%H_%d-%m-%Y")
-        logfile_backup = Path(f"{self.logfile}_{curr_date}.bak")
-        if self.logfile.exists():
-            self.backupLogfile(logfile_backup)
+    # def backupOldRunLogfile(self):
+    #     curr_date = datetime.now().strftime("%S-%M-%H_%d-%m-%Y")
+    #     logfile_backup = Path(f"{self.logfile}_{curr_date}.bak")
+    #     if self.logfile.exists():
+    #         self.backupLogfile(logfile_backup)
     
-    def backupLogfile(self, logfile_backup: Path):
-        try:
-            with open(self.logfile, 'r') as old_run_logfile:
-                with open(f"{logfile_backup}", 'a') as logfile_bakckup_handle:
-                    logfile_bakckup_handle.write(old_run_logfile.read())
-            self.logfile.unlink()
-        except Exception as e:
-            raise(f"[x] Error backing up {self.logfile} to {logfile_backup}: {e}k\n")
+    # def backupLogfile(self, logfile_backup: Path):
+    #     try:
+    #         with open(self.logfile, 'r') as old_run_logfile:
+    #             with open(f"{logfile_backup}", 'a') as logfile_bakckup_handle:
+    #                 logfile_bakckup_handle.write(old_run_logfile.read())
+    #         self.logfile.unlink()
+    #     except Exception as e:
+    #         raise(f"[x] Error backing up {self.logfile} to {logfile_backup}: {e}k\n")
 
 
     # TODO: add logging to browser so we can have a lot of bots and read logs from /logger/$n
