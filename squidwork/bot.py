@@ -8,7 +8,7 @@ from squidwork.logger.logger_to_logfile import LoggerToLogfile
 
 class Bot:
     def __init__(self):
-        self.cache_dir = os.path.join(os.path.expanduser(os.getenv("XDG_HOME_CACHE", "~/.cache")),  "squidwork")
+        self.cache_dir = os.path.join(os.path.expanduser("~/.cache"),  "squidwork")
         os.makedirs(self.cache_dir, exist_ok=True)
         self.headless = True if os.getenv("HEADLESS", "0") == "1" else False
         self.logger = LoggerToLogfile(self.cache_dir)
