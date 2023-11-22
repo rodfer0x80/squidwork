@@ -1,13 +1,10 @@
 .PHONY: build run clean
 
 build:
-	@echo "Building..."
-	@./scripts/build.sh
+	./scripts/build.sh
 
 run: build
-	@echo "Running..."
-	@./scripts/run.sh
+	./scripts/run.sh
 
 clean:
-	@echo "Cleaning..."
-	@./scripts/clean.sh
+	./scripts/clean.sh

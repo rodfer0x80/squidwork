@@ -17,7 +17,8 @@ class mainBot(Bot):
     def openGoogle(self):
         self.actions.getURL("https://google.com")
         self.actions.scrollByY(200)
-        self.actions.click("id", "L2AGLb")
+        by_value = ("id", "L2AGLb")
+        self.actions.click(by_value)
         time.sleep(3)
 
 

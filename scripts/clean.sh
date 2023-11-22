@@ -1,4 +1,4 @@
 #!/bin/sh
 
-WORKDIR="$XDG_CACHE_HOME/squidwork"
+WORKDIR=~/.cache/squidwork
 rm -rf $WORKDIR/* $PWD/**/__pycache__ $PWD/**/*/__pycache__
