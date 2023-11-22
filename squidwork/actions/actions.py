@@ -15,11 +15,9 @@ class Actions:
         return None
     
     def close(self):
-        try:
-            self.browser.close()
-        except:
-            exit(1)
-            
+        self.browser.close()
+
+
     def anyExpectedCondition(self, *cons):
         # hack for OR clause for expected_conditions
         return any(con(self.browser) for con in cons if self.tryCondition(con))
@@ -45,8 +43,8 @@ class Actions:
             self.logger.error(f'Timeout: {by_value[0]} not found by {by_value[1]}')
 
     def click(self, by_value: Tuple[str, str], timeout:float=4, slow:Tuple[bool, float]=(False, 1)):
-        by_value[0] = "css_selector" if by_value[0] == "css" else by_value[0]
-        by_value = (getattr(By, by_value[0].upper()), by_value[1])
+        by = "css_selector" if by_value[0] == "css" else by_value[0]
+        by_value = (getattr(By, by.upper()), by_value[1])
         try:
             element = self.wait(by_value, timeout)
             actions = ActionChains(self.browser).move_to_element(element)
@@ -57,8 +55,8 @@ class Actions:
             self.logger.error(f"WebDriverException: {e}")
 
     def sendKeys(self, by_value:Tuple[str,str], keys:str, timeout:float=4):
-        by_value[0] = "css_selector" if by_value[0] == "css" else by_value[0]
-        by_value = (getattr(By, by_value[0].upper()), by_value[1])
+        by = "css_selector" if by_value[0] == "css" else by_value[0]
+        by_value = (getattr(By, by.upper()), by_value[1])
         try:
             elem = self.wait(by_value, timeout)
             actions = ActionChains(self.browser).move_to_element(elem).pause(1)
