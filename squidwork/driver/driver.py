@@ -1,9 +1,8 @@
 class Driver:
-    def __init__(self, target, headless=True):
+    def __init__(self, headless=True):
         self.options = None
         self.service = None
         self.headless = headless
-        self.target = target
 
     def close(self):
         if self.browser:

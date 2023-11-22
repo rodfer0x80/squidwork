@@ -3,8 +3,8 @@ from .driver import Driver
 import os
 
 class DefaultChromeDriver(Driver):
-    def __init__(self, target, cache_dir, headless=True):
-        super().__init__(target=target, headless=headless)
+    def __init__(self, cache_dir, headless=True):
+        super().__init__( headless=headless)
         self.cache_dir = cache_dir
         self.browser_data_dir = os.path.join(self.cache_dir, "data")
         self.browser = self.init()

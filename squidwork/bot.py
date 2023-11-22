@@ -13,10 +13,8 @@ class Bot:
         os.makedirs(self.cache_dir, exist_ok=True)
         self.logger = LoggerToLogfile(self.cache_dir)
         # TODO: read from batch file or single string target
-        self.target = "https://google.com"
         self.headless = True if os.getenv("HEADLESS", "0") == "1" else False
-        self.browser = DefaultChromeDriver(
-            target=self.target, cache_dir=self.cache_dir, headless=self.headless).getBrowser()
+        self.browser = DefaultChromeDriver(cache_dir=self.cache_dir, headless=self.headless).getBrowser()
         self.actions = Actions(self.browser, self.logger)
         # TODO: fix this
         self.session = requests.Session()
@@ -47,5 +45,5 @@ class Bot:
 
     def openBrowser(self):
         self.addCookiesToSession()
-        threading.Thread(target=self.actions.getURL(self.target)).start()
+        threading.Thread(target=self.actions.getURL("")).start()
         self.logger.info(f"Successfully opened browser")

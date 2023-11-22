@@ -12,9 +12,10 @@ import time
 class mainBot(Bot):
     def __call__(self):
         super().__call__()
-        self.run()
+        self.openGoogle()
 
-    def run(self):
+    def openGoogle(self):
+        self.actions.getURL("https://google.com")
         self.actions.scrollByY(200)
         self.actions.click("id", "L2AGLb")
         time.sleep(3)
