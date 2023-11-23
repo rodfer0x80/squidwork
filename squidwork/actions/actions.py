@@ -8,6 +8,7 @@ from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
 from bs4 import BeautifulSoup
 import requests
 from typing import Any, Tuple
+from .smtpc import SMTPC
 class Actions:
     def __init__(self, browser, logger):
         self.browser = browser
