@@ -2,7 +2,7 @@
 
 ## emails ;;;
 > Save the downloaded JSON file as credentials.json, and move the file to your working directory. this is from googgle cloud api think cloud yes
-> wip
+> wip -- https://developers.google.com/gmail/api/quickstart/python
 
 ## fkup giveaways ;)
 ### setup emails
