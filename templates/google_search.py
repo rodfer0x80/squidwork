@@ -12,16 +12,16 @@ import time
 class mainBot(Bot):
     def __call__(self):
         super().__call__()
-        self.actions.sendEmail(to=["rodrigolf080@gmail.com"], subject="Test", content="squidwork rules")
-        #self.openGoogle()
+        self.openGoogle()
 
     def openGoogle(self):
-        search_text = "test"
+        search_text = input("Search: ")
         self.actions.getURL("https://google.com")
         self.actions.scrollByY(200)
         self.actions.click(("id", "L2AGLb"))
         self.actions.sendKeys(("id", "APjFqb"), search_text, send=True)
-        time.sleep(5)
+        time.sleep(30)
+
 
 def main():
     os.environ["HEADLESS"] = "0"
