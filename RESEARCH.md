@@ -1,5 +1,13 @@
 # research
 
+## TODO
+[ ] multithread docker run
+[ ] receive and fakeopen email links
+
+## emails ;;;
+> Save the downloaded JSON file as credentials.json, and move the file to your working directory. this is from googgle cloud api think cloud yes
+> wip -- https://developers.google.com/gmail/api/quickstart/python
+
 ## fkup giveaways ;)
 ### setup emails
 > https://www.youtube.com/watch?v=EB9AP8yR5eI
