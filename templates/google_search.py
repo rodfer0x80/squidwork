@@ -15,12 +15,12 @@ class mainBot(Bot):
         self.openGoogle()
 
     def openGoogle(self):
-        search_text = "test"
+        search_text = input("Search: ")
         self.actions.getURL("https://google.com")
         self.actions.scrollByY(200)
         self.actions.click(("id", "L2AGLb"))
         self.actions.sendKeys(("id", "APjFqb"), search_text, send=True)
-        time.sleep(5)
+        time.sleep(30)
 
 
 def main():

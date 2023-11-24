@@ -7,6 +7,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
 from bs4 import BeautifulSoup
 import requests
+import time
 from typing import Any, Tuple
 class Actions:
     def __init__(self, browser, logger):
@@ -43,7 +44,9 @@ class Actions:
             self.logger.error(f'Timeout: {by_value[0]} not found by {by_value[1]}')
 
     def click(self, by_value: Tuple[str, str], timeout:float=4, slow:Tuple[bool, float]=(False, 1)):
+        time.sleep(0.1)
         by = "css_selector" if by_value[0] == "css" else by_value[0]
+        by = "class_name" if by_value[0] == "class" else by_value[0]
         by_value = (getattr(By, by.upper()), by_value[1])
         try:
             element = self.wait(by_value, timeout)
@@ -54,8 +57,10 @@ class Actions:
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
 
-    def sendKeys(self, by_value:Tuple[str,str], keys:str, timeout:float=4):
+    def sendKeys(self, by_value:Tuple[str,str], keys:str, send=False,timeout:float=4):
+        time.sleep(0.1)
         by = "css_selector" if by_value[0] == "css" else by_value[0]
+        by = "class_name" if by_value[0] == "class" else by_value[0]
         by_value = (getattr(By, by.upper()), by_value[1])
         try:
             elem = self.wait(by_value, timeout)
@@ -63,6 +68,8 @@ class Actions:
             actions.click().perform()
             elem.clear()
             elem.send_keys(keys)
+            if send:
+              elem.send_keys("\n")
             self.logger.info(f"sendKeysBy{by_value[0]} sent keys to {by_value[1]}")
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
