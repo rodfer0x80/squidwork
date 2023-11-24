@@ -7,16 +7,16 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
 from bs4 import BeautifulSoup
 import requests
-from typing import Any, Tuple
+from typing import Union, List, Tuple
+
+from squidwork.actions.smtpc import SMTPController
 class Actions:
     def __init__(self, browser, logger):
         self.browser = browser
         self.logger = logger
-        return None
     
     def close(self):
         self.browser.close()
-
 
     def anyExpectedCondition(self, *cons):
         # hack for OR clause for expected_conditions
@@ -100,5 +100,14 @@ class Actions:
                 return requests.get(url, **kwargs)
             if method.upper() == "POST":
                 return requests.post(url, **kwargs)
+        except WebDriverException as e:
+            self.logger.error(f"WebDriverException: {e}")
+
+    def sendEmail(self, to: Union[List, str], subject: str, content: str):
+        try:
+            mailc = SMTPController()
+            mail_log = mailc.send(to=to, subject=subject, content=content)
+            del mailc
+            self.logger.info(mail_log)
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")

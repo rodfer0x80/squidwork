@@ -1,10 +1,18 @@
+#!make
+include .env
+export USER_EMAIL
+export USER_EMAIL_PASSWD
+
 .PHONY: build run clean
 
 build:
-	./scripts/build.sh
+	@echo "Building..."
+	@./scripts/build.sh
 
 run: build
-	./scripts/run.sh
+	@echo "Running..."
+	@USER_EMAIL=$(USER_EMAIL) USER_EMAIL_PASSWD=$(USER_EMAIL_PASSWD) ./scripts/run.sh
 
 clean:
-	./scripts/clean.sh
+	@echo "Cleaning..."
+	@./scripts/clean.sh

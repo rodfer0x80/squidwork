@@ -1,39 +1,47 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import os
+from typing import Union, List
+class SMTPController:
+  PROVIDER = 'Gmail'
 
+  def __init__(self) -> None:
+    self.user_email = os.environ.get("USER_EMAIL")
+    self.user_email_passwd = os.environ.get("USER_EMAIL_PASSWD")
+    if self.user_email == None or self.user_email_passwd == None:
+      raise Exception("Account credentials not defined in environment variables")
+    self.server = smtplib.SMTP('smtp.gmail.com:587')
+    self.server.ehlo(self.PROVIDER)
+    self.server.starttls()
+    self.server.login(self.user_email, self.user_email_passwd)
 
-# TODO: cleanup, test, integrate, spam giveaways to domain emails,
-# write template to read and open link and get referal points
-'''
-Firstly, you'll need to allow access for less secure apps 
-in your Gmail settings. Go to your Google Account settings, 
-then Security, and enable "Less secure app access."
-'''
+  def _send(self, to: str, subject: str, content: str):
+    message = MIMEMultipart()
+    message["From"] = self.user_email
+    message["To"] = to
+    message["Subject"] = subject
+    messageText = MIMEText(content,'html')
+    message.attach(messageText)
 
-# Email content
-sender_email = "your_email@gmail.com"
-receiver_email = "recipient@example.com"
-subject = "Subject of the email"
-message_body = "This is the message body of the email."
+    fromaddr = self.user_email
+    toaddrs  = to
+    self.server.sendmail(fromaddr,toaddrs,message.as_string())
+    return message.as_string()
 
-# Gmail SMTP configuration
-smtp_server = "smtp.gmail.com"
-smtp_port = 587  # SSL: 465, TLS: 587
-smtp_username = "your_email@gmail.com"
-smtp_password = "your_password_here"
+  def __del__(self):
+    self.server.quit()
 
-# Compose the email
-message = MIMEMultipart()
-message['From'] = sender_email
-message['To'] = receiver_email
-message['Subject'] = subject
-message.attach(MIMEText(message_body, 'plain'))
+  def send(self, to: Union[List, str], subject: str, content: str):
+    ret = ""
+    if isinstance(to, List):
+      for _to in to:
+        ret += self._send(_to, subject, content)
+    else:
+      ret = self._send(to, subject, content)
+    return ret
 
-# Connect to Gmail's SMTP server
-with smtplib.SMTP(smtp_server, smtp_port) as server:
-    server.starttls()
-    server.login(smtp_username, smtp_password)
-    server.send_message(message)
-
-print("Email sent successfully!")
+if __name__ == "__main__":
+  mailc = SMTPController()
+  mailc.send(to=["squidwork@rodfer.online", "squidwork1@rodfer.online"], subject="Test", content="squidwork rules" )
+  del mailc
