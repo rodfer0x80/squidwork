@@ -7,7 +7,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
 from bs4 import BeautifulSoup
 import requests
+
 from typing import Union, List, Tuple
+import time
 
 from squidwork.actions.smtpc import SMTPController
 

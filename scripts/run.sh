@@ -1,4 +1,4 @@
 #!/bin/sh
 
-WORKDIR=~/.cache/squidwork
+WORKDIR=~/.cache/$(basename $(pwd))
 $WORKDIR/.venv/bin/python main.py
