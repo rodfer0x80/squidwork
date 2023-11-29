@@ -112,10 +112,10 @@ class Actions:
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
 
-    def sendEmail(self, to: Union[List, str], subject: str, content: str):
+    def sendEmail(self, to: Union[List, str], subject: str, content: str, n:int=1):
         try:
             mailc = SMTPController()
-            mail_log = mailc.send(to=to, subject=subject, content=content)
+            mail_log = mailc.send(to=to, subject=subject, content=content, n=n)
             del mailc
             self.logger.info(mail_log)
         except WebDriverException as e:

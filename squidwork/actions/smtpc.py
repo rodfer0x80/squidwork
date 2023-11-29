@@ -23,7 +23,6 @@ class SMTPController:
     message["Subject"] = subject
     messageText = MIMEText(content,'html')
     message.attach(messageText)
-
     fromaddr = self.user_email
     toaddrs  = to
     self.server.sendmail(fromaddr,toaddrs,message.as_string())
@@ -32,16 +31,17 @@ class SMTPController:
   def __del__(self):
     self.server.quit()
 
-  def send(self, to: Union[List, str], subject: str, content: str):
+  def send(self, to: Union[List, str], subject: str, content: str, n:int=1):
     ret = ""
-    if isinstance(to, List):
-      for _to in to:
-        ret += self._send(_to, subject, content)
-    else:
-      ret = self._send(to, subject, content)
+    for _ in range(n):
+      if isinstance(to, List):
+        for _to in to:
+          ret += self._send(_to, subject, content)
+      else:
+        ret = self._send(to, subject, content)
     return ret
 
 if __name__ == "__main__":
   mailc = SMTPController()
-  mailc.send(to=["squidwork@rodfer.online", "squidwork1@rodfer.online"], subject="Test", content="squidwork rules" )
+  mailc.send(to=["squidwork@rodfer.online", "squidwork1@rodfer.online"], subject="Test", content="squidwork rules", n=1)
   del mailc
