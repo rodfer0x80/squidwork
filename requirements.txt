@@ -1,7 +1,11 @@
 requests
 selenium
 beautifulsoup4
+openai-whisper
+sounddevice
 numpy
+nltk
+pygame
 py-pdf-parser
 google-api-python-client
 google-auth-httplib2
