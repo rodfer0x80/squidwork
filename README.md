@@ -24,3 +24,7 @@
 [ ] smart templates for job form providers?
 > https://jobs.sequoiacap.com/jobs/?skills=Artificial+Intelligence
 ...
+### smart music assistant search and local play
+...
+### ext
+[ ] write smart templates, later gpt write/adapt templates?
