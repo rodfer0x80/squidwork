@@ -8,7 +8,7 @@
 [ ] move openai whisper to tinygrad local whisper
 [ ] move tts firefox to tinygrad tts (from conversation.py)
 [ ] make own tinygpt or mamba? : template
-[ ] move gpt/mamba template to actions brain parser
+[ ] move gpt/mamba template to actions brain parser? freeBing3.5 template->brain code 1 shot?
 [ ] part VAL to own project depending on squidwork
 [ ] document this shit on blog and stuffs? ...
 ### Send voice emails, social media posts/comments, texts and call VOIP extension
