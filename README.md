@@ -26,5 +26,7 @@
 ...
 ### smart music assistant search and local play
 ...
+### store models on discord
+[ ] https://www.youtube.com/watch?v=c_arQ-6ElYI
 ### ext
 [ ] write smart templates, later gpt write/adapt templates?
