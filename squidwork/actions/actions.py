@@ -28,11 +28,9 @@ class Actions:
 
     def tryCondition(self, con):
         try:
-            yield con(self.browser)
+            return con(self.browser)
         except Exception:
-            yield False
-        finally:
-            yield False
+            return False
         
     def scrollByY(self, y: int) -> int:
         try:
@@ -48,17 +46,14 @@ class Actions:
             self.logger.error(f"WebDriverException: {e}")
             return 1
 
-        
-
     @contextmanager
-    def wait(self, by_value: Tuple[str, str], timeout:float=4):
+    def wait(self, by_value: Tuple[str, str], timeout:float=4.0):
         try:
-            yield WebDriverWait(self.browser, timeout).until(
+            return WebDriverWait(self.browser, timeout).until(
                 expected_conditions.presence_of_element_located(by_value)
             )
         except TimeoutException:
             self.logger.error(f'Timeout: {by_value[0]} not found by {by_value[1]}')
-            yield None
 
     def click(self, by_value: Tuple[str, str], timeout:float=4, slow:Tuple[bool, float]=(False, 1)) -> int:
         time.sleep(0.1)
@@ -67,9 +62,9 @@ class Actions:
         by_value = (getattr(By, by.upper()), by_value[1])
         try:
             if element := self.wait(by_value, timeout):
-                actions = ActionChains(self.browser).move_to_element(element)
-                actions.pause(slow[1]) if slow[0] else None
-                actions.click().perform()
+                ac = ActionChains(self.browser).move_to_element(element)
+                ac.pause(slow[1]) if slow[0] else None
+                ac.click().perform()
                 self.logger.info(f"buttonClickBy{by_value[0]}{'Slow' if slow else ''} clicked {by_value[1]}")
                 return 0
             else:
@@ -78,22 +73,24 @@ class Actions:
             self.logger.error(f"WebDriverException: {e}")
             return 2
 
-    def sendKeys(self, by_value:Tuple[str,str], keys:str, send=False,timeout:float=4):
+    def sendKeys(self, by_value:Tuple[str,str], keys:str, send=False,timeout:float=4.0) -> int:
         time.sleep(0.1)
         by = "css_selector" if by_value[0] == "css" else by_value[0]
         by = "class_name" if by_value[0] == "class" else by_value[0]
         by_value = (getattr(By, by.upper()), by_value[1])
         try:
-            elem = self.wait(by_value, timeout)
-            actions = ActionChains(self.browser).move_to_element(elem).pause(1)
-            actions.click().perform()
-            elem.clear()
-            elem.send_keys(keys)
-            if send:
-              elem.send_keys("\n")
-            self.logger.info(f"sendKeysBy{by_value[0]} sent keys to {by_value[1]}")
+            if elem := self.wait(by_value, timeout):
+                ac = ActionChains(self.browser).move_to_element(elem).pause(1)
+                ac.click().perform()
+                elem.clear()
+                elem.send_keys(keys)
+                if send:
+                    elem.send_keys("\n")
+                self.logger.info(f"sendKeysBy{by_value[0]} sent keys to {by_value[1]}")
+                return 0
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
+            return 1
 
     def waitByPageURL(self, url:str, timeout:float=10.0) -> int:
         response = requests.get(url)

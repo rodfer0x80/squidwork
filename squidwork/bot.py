@@ -5,13 +5,17 @@ import requests
 from squidwork.driver.default_chrome_driver import DefaultChromeDriver
 from squidwork.actions.actions import Actions
 from squidwork.logger.logger_to_logfile import LoggerToLogfile
+from squidwork.logger.logger_to_stdout import LoggerToStdout
 
 class Bot:
-    def __init__(self):
+    def __init__(self, logger="stdout"):
         self.cache_dir = os.path.join(os.path.expanduser("~/.cache"),  "squidwork")
         os.makedirs(self.cache_dir, exist_ok=True)
         self.headless = True if os.getenv("HEADLESS", "0") == "1" else False
-        self.logger = LoggerToLogfile(self.cache_dir)
+        if logger == "logfile":
+            self.logger = LoggerToLogfile(self.cache_dir)
+        elif logger == "stdout":
+            self.logger = LoggerToStdout()
         # TODO: read from batch file or single string target #2
         self.browser = DefaultChromeDriver(cache_dir=self.cache_dir, headless=self.headless).getBrowser()
         self.actions = Actions(self.browser, self.logger)
