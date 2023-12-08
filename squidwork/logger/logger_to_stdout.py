@@ -1,9 +1,9 @@
 class LoggerToStdout:
     def __init__(self):
         pass 
-    
+
     def log(self, msg: str):
-        print(f"[LOG]: {msg}")
+        self.debug(msg)
 
     def debug(self, msg: str):
         print(f"[DEBUG]: {msg}")
