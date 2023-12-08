@@ -3,8 +3,9 @@ from .driver import Driver
 import os
 
 class DefaultChromeDriver(Driver):
-    def __init__(self, cache_dir, headless=False):
+    def __init__(self, cache_dir, headless=False, incognito=False):
         super().__init__(headless=headless)
+        self.incognito = incognito
         self.cache_dir = cache_dir
         self.browser_data_dir = os.path.join(self.cache_dir, "data")
         self.browser = self.init()
@@ -42,11 +43,13 @@ class DefaultChromeDriver(Driver):
         #self.option.add_experimental_option("detach", True) #prevent window from closing
 
     def enableStealthOptions(self, country_id="en-GB"):
-        self.options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) "
-                                  "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36")
+        # TODO: fix this make it random mobile ua that works for bing else do anything that works for bing
+        #self.options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) "
+        #                          "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36")
         self.options.add_argument(f"--{country_id}")
         self.options.add_argument("--window-size=1920,1080")
-        self.options.add_argument("--incognito")
+        if self.incognito:
+            self.options.add_argument("--incognito")
         self.options.add_argument("--disable-gpu")
         # self.options.add_argument('--start-maximized')
         # self.options.add_argument('--start-fullscreen')

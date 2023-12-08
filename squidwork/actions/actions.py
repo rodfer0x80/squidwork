@@ -45,22 +45,24 @@ class Actions:
         except TimeoutException:
             self.logger.error(f'Timeout: {by_value[0]} not found by {by_value[1]}')
 
-    def click(self, by_value: Tuple[str, str], timeout:float=4, slow:Tuple[bool, float]=(False, 1)):
-        time.sleep(0.1)
+    def click(self, by_value: Tuple[str, str], timeout:float=4, slow:float=0):
+        time.sleep(0.5)
+        assert self.wait(by_value, timeout), f"Timeout: {by_value[0]} not found by {by_value[1]}"
         by = "css_selector" if by_value[0] == "css" else by_value[0]
         by = "class_name" if by_value[0] == "class" else by_value[0]
         by_value = (getattr(By, by.upper()), by_value[1])
         try:
             element = self.wait(by_value, timeout)
             actions = ActionChains(self.browser).move_to_element(element)
-            actions.pause(slow[1]) if slow[0] else None
+            actions.pause(slow) if slow else None
             actions.click().perform()
             self.logger.info(f"buttonClickBy{by_value[0]}{'Slow' if slow else ''} clicked {by_value[1]}")
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
 
     def sendKeys(self, by_value:Tuple[str,str], keys:str, send=False,timeout:float=4):
-        time.sleep(0.1)
+        time.sleep(0.5)
+        assert self.wait(by_value, timeout), f"Timeout: {by_value[0]} not found by {by_value[1]}"
         by = "css_selector" if by_value[0] == "css" else by_value[0]
         by = "class_name" if by_value[0] == "class" else by_value[0]
         by_value = (getattr(By, by.upper()), by_value[1])

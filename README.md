@@ -12,13 +12,10 @@
 [ ] part VAL to own project depending on squidwork
 [ ] document this shit on blog and stuffs? ...
 ### Send voice emails, social media posts/comments, texts and call VOIP extension
-...
-### rig giveaways to get a drone and some gpus
-> https://giveaways.org/#top25
-> https://upvir.al/152563/lp152563?ref_id=655ae5e672d63M
-[ ] spam domain emails
-[ ] open and apply to giveaway on incognito
 [ ] multiprocess docker headless
+[ ] social media campaigns bot ...
+[ ] make VAL blue checked
+[ ] win a gpu on instagram giveaways to feed VAL
 ...
 ### autoapply jobs to piss of hr ppl
 [ ] smart templates for job form providers?

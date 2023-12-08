@@ -11,9 +11,10 @@ class Bot:
         self.cache_dir = os.path.join(os.path.expanduser("~/.cache"),  "squidwork")
         os.makedirs(self.cache_dir, exist_ok=True)
         self.headless = True if os.getenv("HEADLESS", "0") == "1" else False
+        self.incognito = True if os.getenv("INCOGNITO", "0") == "1" else False
         self.logger = LoggerToLogfile(self.cache_dir)
         # TODO: read from batch file or single string target #2
-        self.browser = DefaultChromeDriver(cache_dir=self.cache_dir, headless=self.headless).getBrowser()
+        self.browser = DefaultChromeDriver(cache_dir=self.cache_dir, headless=self.headless, incognito=self.incognito).getBrowser()
         self.actions = Actions(self.browser, self.logger)
         # TODO: fix this load from ~/.cache/squidwork/data #1
         self.session = requests.Session()
@@ -41,7 +42,8 @@ class Bot:
         ]
 
     def openBrowser(self):
-        self.addCookiesToSession()
+        if not self.incognito:
+            self.addCookiesToSession()
         threading.Thread(target=self.actions.getURL("http://localhost:1337")).start()
         self.logger.info(f"Successfully opened browser")
 
