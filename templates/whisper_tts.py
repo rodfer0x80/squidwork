@@ -7,6 +7,7 @@ import pygame
 import tempfile
 import os
 
+# https://github.com/tinygrad/tinygrad/blob/master/examples/conversation.py
 
 def text_to_speech(text, output_path):
     command = f'tts --text "{text}" --out_path {output_path}'
