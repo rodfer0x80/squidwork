@@ -9,9 +9,6 @@ class DefaultChromeDriver(Driver):
         self.browser_data_dir = os.path.join(self.cache_dir, "data")
         self.browser = self.init()
 
-    def close(self):
-        super().close()
-
     def init(self):
         self.options = webdriver.ChromeOptions()
         self.enableSystemOptions()
@@ -42,8 +39,9 @@ class DefaultChromeDriver(Driver):
         #self.option.add_experimental_option("detach", True) #prevent window from closing
 
     def enableStealthOptions(self, country_id="en-GB"):
-        self.options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) "
-                                  "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36")
+        # TODO: fix this with a better UA 
+        #self.options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) "
+        #                          "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36")
         self.options.add_argument(f"--{country_id}")
         self.options.add_argument("--window-size=1920,1080")
         self.options.add_argument("--incognito")

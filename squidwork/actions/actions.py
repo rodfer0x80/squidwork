@@ -13,7 +13,7 @@ from requests.exceptions import RequestException
 from typing import Union, List, Tuple
 import time
 
-from squidwork.actions.smtpc import SMTPController
+from squidwork.actions.smtpc import GmailController
 
 class Actions:
     def __init__(self, browser, logger):
@@ -41,7 +41,7 @@ class Actions:
             .scroll_from_origin(scroll_origin, 0, y)\
             .perform()
 
-    def wait(self, by_value: Tuple[str, str], timeout:float=4):
+    def wait(self, by_value: Tuple[str, str], timeout:float=8.0):
         try:
             return WebDriverWait(self.browser, timeout).until(
                 expected_conditions.presence_of_element_located(by_value)
@@ -49,7 +49,7 @@ class Actions:
         except TimeoutException:
             self.logger.error(f'Timeout: {by_value[0]} not found by {by_value[1]}')
 
-    def click(self, by_value: Tuple[str, str], timeout:float=4, slow:Tuple[bool, float]=(False, 1)):
+    def click(self, by_value: Tuple[str, str], timeout:float=4.0, slow:Tuple[bool, float]=(False, 1)):
         time.sleep(0.1)
         by = "css_selector" if by_value[0] == "css" else by_value[0]
         by = "class_name" if by_value[0] == "class" else by_value[0]
@@ -63,7 +63,7 @@ class Actions:
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
 
-    def sendKeys(self, by_value:Tuple[str,str], keys:str, send=False,timeout:float=4):
+    def sendKeys(self, by_value:Tuple[str,str], keys:str, send=False,timeout:float=4.0):
         time.sleep(0.1)
         by = "css_selector" if by_value[0] == "css" else by_value[0]
         by = "class_name" if by_value[0] == "class" else by_value[0]
@@ -80,7 +80,7 @@ class Actions:
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
 
-    def waitByPageURL(self, url, timeout=30):
+    def waitByPageURL(self, url:str, timeout:float=8.0):
         response = requests.get(url)
         soup = BeautifulSoup(response.content, "html.parser")
         title = soup.title.string if soup.title else ""
@@ -91,7 +91,7 @@ class Actions:
             except WebDriverException as e:
                 self.logger.error(f"WebDriverException: {e}")
 
-    def elementHasClass(self, element, class_name):
+    def elementHasClass(self, element, class_name:str):
         try:
             ret = class_name in element.get_attribute("class")
             self.logger.info(f"Found {class_name} in {element}")
@@ -107,7 +107,7 @@ class Actions:
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
 
-    def request(self, url, method="GET", **kwargs) -> requests.Response:
+    def request(self, url:str, method:str="GET", **kwargs) -> requests.Response:
         try:
             response = None
             if method.upper() == "GET":
@@ -125,10 +125,14 @@ class Actions:
             self.logger.error(f"RequestException: {e}")
             return None
         
-    def sendEmail(self, to: Union[List, str], subject: str, content: str):
+    def sendEmail(self, to: Union[List, str], subject: str, content: str, provider:str="gmail"):
         try:
-            mailc = SMTPController()
+            if provider.lower() == "gmail":
+                mailc = GmailController()
+            else:
+                raise Exception("Provider not supported")    
             mail_log = mailc.send(to=to, subject=subject, content=content)
+            # TODO: is this needed? 
             # del mailc
             self.logger.info(mail_log)
         except WebDriverException as e:

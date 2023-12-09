@@ -3,18 +3,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os
 from typing import Union, List
-class SMTPController:
-  PROVIDER = 'Gmail'
 
+class SMTPController:
   def __init__(self) -> None:
-    self.user_email = os.environ.get("USER_EMAIL")
-    self.user_email_passwd = os.environ.get("USER_EMAIL_PASSWD")
-    if self.user_email == None or self.user_email_passwd == None:
-      raise Exception("Account credentials not defined in environment variables")
-    self.server = smtplib.SMTP('smtp.gmail.com:587')
-    self.server.ehlo(self.PROVIDER)
-    self.server.starttls()
-    self.server.login(self.user_email, self.user_email_passwd)
+    return None
 
   def _send(self, to: str, subject: str, content: str):
     message = MIMEMultipart()
@@ -41,7 +33,18 @@ class SMTPController:
       ret = self._send(to, subject, content)
     return ret
 
-if __name__ == "__main__":
-  mailc = SMTPController()
-  mailc.send(to=["squidwork@rodfer.online", "squidwork1@rodfer.online"], subject="Test", content="squidwork rules" )
-  del mailc
+
+class GmailController(SMTPController):
+  PROVIDER = 'Gmail'
+
+  def __init__(self) -> None:
+    self.user_email = os.environ.get("USER_EMAIL")
+    self.user_email_passwd = os.environ.get("USER_EMAIL_PASSWD")
+
+    if self.user_email == None or self.user_email_passwd == None:
+      raise Exception("Account credentials not defined in environment variables")
+
+    self.server = smtplib.SMTP('smtp.gmail.com:587')
+    self.server.ehlo(self.PROVIDER)
+    self.server.starttls()
+    self.server.login(self.user_email, self.user_email_passwd)

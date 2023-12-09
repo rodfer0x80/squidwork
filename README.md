@@ -1,6 +1,13 @@
 # squidwork
 <p>why work we so fly</p>
 
+## Goals
+<p> Readability</p>
+<p> Ease of integration</p>
+<p> Ease of expansion and development of cool assistants/bots </p>
+<p> Git gud, big boi project architecture and maintenance, get programming skillz </p>
+<p> Just kidding, the only goal is to impress random girls in coffee shops as apparently colourful text spam on a laptop screen isn't "attractive" - "look what my AI can do" will become the best pick up line of 2024</p>
+
 ## TODO
 ### Talk with VAL
 [ ] move whisper template to actions call to listen and parse
@@ -26,7 +33,5 @@
 ...
 ### smart music assistant search and local play
 ...
-### store models on discord
-[ ] https://www.youtube.com/watch?v=c_arQ-6ElYI
 ### ext
 [ ] write smart templates, later gpt write/adapt templates?
