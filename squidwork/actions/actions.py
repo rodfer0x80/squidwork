@@ -10,15 +10,17 @@ from bs4 import BeautifulSoup
 import requests
 from requests.exceptions import RequestException
 
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, Dict
 import time
 
 from squidwork.actions.smtpc import GmailController
 
 class Actions:
-    def __init__(self, browser, logger):
+    def __init__(self, browser, logger, user_email_creds:Dict[str,str]=None):
         self.browser = browser
         self.logger = logger
+        self.user_email = user_email_creds["user_email"] 
+        self.user_email_password = user_email_creds["user_email_password"] 
     
     def close(self):
         self.browser.close()
@@ -127,8 +129,9 @@ class Actions:
         
     def sendEmail(self, to: Union[List, str], subject: str, content: str, provider:str="gmail"):
         try:
+            assert self.user_email and self.user_email_password, "Email credentials not defined in environment variables"
             if provider.lower() == "gmail":
-                mailc = GmailController()
+                mailc = GmailController(self.user_email, self.user_email_password)
             else:
                 raise Exception("Provider not supported")    
             mail_log = mailc.send(to=to, subject=subject, content=content)

@@ -20,11 +20,12 @@ class mainBot(Bot):
         self.actions.scrollByY(200)
         self.actions.click(("id", "L2AGLb"))
         self.actions.sendKeys(("id", "APjFqb"), search_text, send=True)
-        time.sleep(5)
+        time.sleep(4.0)
 
 
 def main():
     os.environ["HEADLESS"] = "0"
+    os.environ['INCOGNITO'] = "1"
     mainBot()()
     return 0
 
