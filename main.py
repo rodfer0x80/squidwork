@@ -17,9 +17,10 @@ class mainBot(Bot):
     def openGoogle(self):
         search_text = "test"
         self.actions.getURL("https://google.com")
-        self.actions.scrollByY(200)
-        self.actions.click(("id", "L2AGLb"))
-        self.actions.sendKeys(("id", "APjFqb"), search_text, send=True)
+        self.actions.scroll()
+        self.actions.click(("name", "q"))
+        self.actions.type(("name", "q"), search_text, send=True)
+        self.actions.scroll(n=3)
         time.sleep(4.0)
 
 

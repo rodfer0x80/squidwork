@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.expected_conditions import presence_of_element_located
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
+from selenium.webdriver.common.keys import Keys
 
 from bs4 import BeautifulSoup
 import requests
@@ -36,12 +37,55 @@ class Actions:
             yield False
         finally:
             yield False
-        
-    def scrollByY(self, y: int):
-        scroll_origin = ScrollOrigin.from_viewport(10, 10)
-        ActionChains(self.browser)\
-            .scroll_from_origin(scroll_origin, 0, y)\
-            .perform()
+
+    # TODO: untested
+    def moveTo(self, id:str):
+        element = self.driver.find_element_by_id(id)  # Replace with your element's ID
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+
+    # TODO: untested
+    # def smartScroll(self, element):
+    #     import time
+    #     scroll_pause_time = 1  # You can set your own pause time
+    #     screen_height = driver.execute_script("return window.screen.height;")
+    #     i = 1
+
+    #     while True:
+    #         # Scroll one screen height each time
+    #         driver.execute_script(f"window.scrollTo(0, {screen_height}*{i});")
+    #         i += 1
+    #         time.sleep(scroll_pause_time)
+    #         # Update scroll height each time after scrolling, since the page can load content
+    #         scroll_height = driver.execute_script("return document.body.scrollHeight;")
+    #         if (screen_height * i) > scroll_height:
+    #             break  # Exit the loop when the bottom of the page is reached
+
+    # TODO: this is broken
+    def scrollBy(self, x:int=0, y:int=0):
+        # iframe = driver.find_element_by_id('iframe-id')  # Replace with the iframe's ID
+        # driver.switch_to.frame(iframe)
+        try:
+            self.browser.execute_script(f"window.scrollBy({x}, {y});")
+            self.logger.info(f"Scrolled by {x}, {y}")
+        except WebDriverException as e:
+            self.logger.error(f"WebDriverException: {e}")
+
+    def scrollTo(self, element):
+        try:
+            self.browser.execute_script("arguments[0].scrollIntoView(true);", element)
+            self.logger.info(f"Scrolled by {x}, {y}")
+        except WebDriverException as e:
+            self.logger.error(f"WebDriverException: {e}")
+
+    def scroll(self, n:int=1):
+        try:
+            for _ in range(n):
+                body = self.browser.find_element(By.TAG_NAME, 'body')
+                body.send_keys(Keys.PAGE_DOWN)
+            self.logger.info(f"Scrolled {n} times")
+        except WebDriverException as e:
+            self.logger.error(f"WebDriverException: {e}")
 
     def wait(self, by_value: Tuple[str, str], timeout:float=8.0):
         try:
@@ -50,6 +94,7 @@ class Actions:
             )
         except TimeoutException:
             self.logger.error(f'Timeout: {by_value[0]} not found by {by_value[1]}')
+            return None
 
     def click(self, by_value: Tuple[str, str], timeout:float=4.0, slow:Tuple[bool, float]=(False, 1)):
         time.sleep(0.1)
@@ -58,6 +103,7 @@ class Actions:
         by_value = (getattr(By, by.upper()), by_value[1])
         try:
             element = self.wait(by_value, timeout)
+            assert element is not None, f"Element not found: {by_value[0]}: {by_value[1]}"
             actions = ActionChains(self.browser).move_to_element(element)
             actions.pause(slow[1]) if slow[0] else None
             actions.click().perform()
@@ -65,19 +111,20 @@ class Actions:
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
 
-    def sendKeys(self, by_value:Tuple[str,str], keys:str, send=False,timeout:float=4.0):
+    def type(self, by_value:Tuple[str,str], keys:str, send=False,timeout:float=4.0):
         time.sleep(0.1)
         by = "css_selector" if by_value[0] == "css" else by_value[0]
         by = "class_name" if by_value[0] == "class" else by_value[0]
         by_value = (getattr(By, by.upper()), by_value[1])
         try:
-            elem = self.wait(by_value, timeout)
-            actions = ActionChains(self.browser).move_to_element(elem).pause(1)
+            element = self.wait(by_value, timeout)
+            assert element is not None, f"Element not found: {by_value[0]}: {by_value[1]}"
+            actions = ActionChains(self.browser).move_to_element(element).pause(1)
             actions.click().perform()
-            elem.clear()
-            elem.send_keys(keys)
+            element.clear()
+            element.send_keys(keys)
             if send:
-              elem.send_keys("\n")
+              element.send_keys(Keys.RETURN)
             self.logger.info(f"sendKeysBy{by_value[0]} sent keys to {by_value[1]}")
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")

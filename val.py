@@ -213,6 +213,8 @@ class Agent:
             print(sep)
     
     def chat(self):
+        user_delim = "user"
+        resp_delim = "machine"
         with self.log_writer() as log:
             while True:
                 tokens = [self.listener.enc._special_tokens["<|startoftranscript|>"], self.listener.enc._special_tokens["<|notimestamps|>"]]
@@ -222,26 +224,21 @@ class Agent:
                 s = time.perf_counter()
                 self.listener.is_listening_event.set()
                 prev_text = None
-        while True:
-            for _ in range(RATE // CHUNK): total = np.concatenate([total, q.get()])
-            txt = transcribe_waveform(model, enc, [total], truncate=True)
-            print(txt, end="\r")
-            if txt == "[BLANK_AUDIO]" or re.match(r"^\([\w+ ]+\)$", txt.strip()): continue
-            if prev_text is not None and prev_text == txt:
-            is_listening_event.clear()
-            break
-            prev_text = txtsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-        print() # to avoid llama printing on the same line
-        log.append(f"{user_delim.capitalize()}: {txt}")
+                while True:
+                    for _ in range(self.listener.RATE // self.listener.CHUNK): total = np.concatenate([total, q.get()])
+                    txt = transcribe_waveform(self.listener.model, self.listener.enc, [total], truncate=True)
+                    print(txt, end="\r")
+                    if txt == "[BLANK_AUDIO]" or re.match(r"^\([\w+ ]+\)$", txt.strip()): continue
+                    if prev_text is not None and prev_text == txt:
+                        self.listener.is_listening_event.clear()
+                        break
+                    prev_text = txt
+                log.append(f"{user_delim.capitalize()}: {txt}")
 
-        # Generate with llama
-        with Timing("llama generation: "):
-            outputted, start_pos, response = llama_generate(
-            llama, toks, outputted, txt, start_pos,
-            user_delim=user_delim, resp_delim=resp_delim, temperature=args.llama_temperature,
-            max_tokens=args.llama_count
-            )
-            log.append(f"{resp_delim.capitalize()}: {response}")
+                # Generate with gpt?llamma
+                with Timing("parrot generation: "):
+                    response = self.parrot(txt)
+                    log.append(f"{resp_delim.capitalize()}: {response}")
 
         # Convert to voice
         with Timing("tts: "):
@@ -263,8 +260,6 @@ class Agent:
     def parrot(self, data:str) -> str:
         return data
 
-    def predict(self, data:str) -> str:
-        return self.parrot(data)
 
 # def text_to_speech(text, output_path):
 #     command = f'tts --text "{text}" --out_path {output_path}'
