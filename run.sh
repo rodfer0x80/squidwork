@@ -1,0 +1,2 @@
+#!/bin/sh
+USER_EMAIL=$(USER_EMAIL) USER_EMAIL_PASSWD=$(USER_EMAIL_PASSWD) ./scripts/run.sh

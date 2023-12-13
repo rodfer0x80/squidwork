@@ -3,14 +3,13 @@ from .driver import Driver
 import os
 
 class DefaultChromeDriver(Driver):
-    def __init__(self, cache_dir, headless=False):
+    def __init__(self, cache_dir, driver_flags):
+        headless = driver_flags["headless"]
+        incognito = driver_flags["incognito"]
         super().__init__(headless=headless)
         self.cache_dir = cache_dir
         self.browser_data_dir = os.path.join(self.cache_dir, "data")
         self.browser = self.init()
-
-    def close(self):
-        super().close()
 
     def init(self):
         self.options = webdriver.ChromeOptions()
@@ -41,12 +40,14 @@ class DefaultChromeDriver(Driver):
         self.options.add_argument(f"user-data-dir={self.browser_data_dir}") # cookies and browser data dir
         #self.option.add_experimental_option("detach", True) #prevent window from closing
 
-    def enableStealthOptions(self, country_id="en-GB"):
-        self.options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) "
-                                  "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36")
+    def enableStealthOptions(self, country_id="en-GB", incognito=False):
+        # TODO: fix this with a better UA 
+        #self.options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) "
+        #                          "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36")
         self.options.add_argument(f"--{country_id}")
         self.options.add_argument("--window-size=1920,1080")
-        self.options.add_argument("--incognito")
+        if incognito:
+            self.options.add_argument("--incognito")
         self.options.add_argument("--disable-gpu")
         # self.options.add_argument('--start-maximized')
         # self.options.add_argument('--start-fullscreen')
