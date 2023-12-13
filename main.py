@@ -17,6 +17,8 @@ import yaml
 from sentencepiece import SentencePieceProcessor
 import tempfile
 import os
+import sys
+import time
 
 from tinygrad.helpers import Timing, dtypes, fetch
 from tinygrad.tensor import Tensor
@@ -318,4 +320,4 @@ def main():
     return 0
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
