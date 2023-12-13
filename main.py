@@ -1,4 +1,4 @@
-from squidwork.bot import Bot
+from squidwork.agent import Agent
 
 import os
 import sys
@@ -9,17 +9,17 @@ import time
 # TODO: add frontend proxy running on client browser to hide selenium (LATE DEV) - proxy through tor for now (EARLY DEV)
 # TODO: add short docs for the project
 
-class mainBot(Bot):
+class SearchAgent(Agent):
     def __call__(self):
         super().__call__()
-        self.openGoogle()
+        self.searchGoogle()
 
-    def openGoogle(self):
-        search_text = "test"
-        self.actions.getURL("https://google.com")
-        self.actions.scroll()
-        self.actions.click(("name", "q"))
-        self.actions.type(("name", "q"), search_text, send=True)
+    def searchGoogle(self):
+        search_text = "squidwork rules"
+        self.actions.get_url("https://google.com")
+        self.actions.scroll(n=1)
+        self.actions.click(by_value=("name", "q"))
+        self.actions.type(by_value=("name", "q"), keys=search_text, send=True)
         self.actions.scroll(n=3)
         time.sleep(4.0)
 
@@ -27,7 +27,7 @@ class mainBot(Bot):
 def main():
     os.environ["HEADLESS"] = "0"
     os.environ['INCOGNITO'] = "1"
-    mainBot()()
+    SearchAgent()()
     return 0
 
 

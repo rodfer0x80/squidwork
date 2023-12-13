@@ -26,11 +26,10 @@ class Actions:
     def close(self):
         self.browser.close()
 
-    def anyExpectedCondition(self, *cons):
-        # hack for OR clause for expected_conditions
-        return any(con(self.browser) for con in cons if self.tryCondition(con))
-
-    def tryCondition(self, con):
+    # hack for 'or' clause for expected_conditions
+    def any_expected_condition(self, *cons):
+        return any(con(self.browser) for con in cons if self.try_condition(con))
+    def try_condition(self, con):
         try:
             yield con(self.browser)
         except Exception:
@@ -61,7 +60,7 @@ class Actions:
     #         if (screen_height * i) > scroll_height:
     #             break  # Exit the loop when the bottom of the page is reached
 
-    # TODO: this is broken
+    # TODO: this is broken btw fix it later
     def scrollBy(self, x:int=0, y:int=0):
         # iframe = driver.find_element_by_id('iframe-id')  # Replace with the iframe's ID
         # driver.switch_to.frame(iframe)
@@ -70,14 +69,12 @@ class Actions:
             self.logger.info(f"Scrolled by {x}, {y}")
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
-
-    def scrollTo(self, element):
+    def scroll_to(self, element):
         try:
             self.browser.execute_script("arguments[0].scrollIntoView(true);", element)
-            self.logger.info(f"Scrolled by {x}, {y}")
+            self.logger.info(f"Scrolled to {element}")
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
-
     def scroll(self, n:int=1):
         try:
             for _ in range(n):
@@ -96,6 +93,7 @@ class Actions:
             self.logger.error(f'Timeout: {by_value[0]} not found by {by_value[1]}')
             return None
 
+    # this two can probly be shorter
     def click(self, by_value: Tuple[str, str], timeout:float=4.0, slow:Tuple[bool, float]=(False, 1)):
         time.sleep(0.1)
         by = "css_selector" if by_value[0] == "css" else by_value[0]
@@ -129,7 +127,7 @@ class Actions:
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
 
-    def waitByPageURL(self, url:str, timeout:float=8.0):
+    def wait_by_page_url(self, url:str, timeout:float=8.0):
         response = requests.get(url)
         soup = BeautifulSoup(response.content, "html.parser")
         title = soup.title.string if soup.title else ""
@@ -140,7 +138,7 @@ class Actions:
             except WebDriverException as e:
                 self.logger.error(f"WebDriverException: {e}")
 
-    def elementHasClass(self, element, class_name:str):
+    def element_has_class(self, element, class_name:str):
         try:
             ret = class_name in element.get_attribute("class")
             self.logger.info(f"Found {class_name} in {element}")
@@ -148,24 +146,20 @@ class Actions:
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
 
-    def getURL(self, url: str):
+    def get_url(self, url: str):
         try:
             self.browser.get(url)
             self.logger.info(f"Successfully fetched {url}")
-            self.waitByPageURL(url)
+            self.wait_by_page_url(url)
         except WebDriverException as e:
             self.logger.error(f"WebDriverException: {e}")
 
     def request(self, url:str, method:str="GET", **kwargs) -> requests.Response:
         try:
             response = None
-            if method.upper() == "GET":
-                response = requests.get(url, **kwargs)
-            elif method.upper() == "POST":
-                response = requests.post(url, **kwargs)
-            
-            # Check if the response is successful
-            if response and response.ok:
+            if method.upper() == "GET": response = requests.get(url, **kwargs)
+            elif method.upper() == "POST":response = requests.post(url, **kwargs)
+            if response and response.ok: 
                 return response
             else:
                 self.logger.error(f"Request failed with status code: {response.status_code}")
@@ -174,7 +168,7 @@ class Actions:
             self.logger.error(f"RequestException: {e}")
             return None
         
-    def sendEmail(self, to: Union[List, str], subject: str, content: str, provider:str="gmail"):
+    def send_email(self, to: Union[List, str], subject: str, content: str, provider:str="gmail"):
         try:
             assert self.user_email and self.user_email_password, "Email credentials not defined in environment variables"
             if provider.lower() == "gmail":

@@ -1,1 +1,1 @@
-from squidwork.bot import Bot
+from squidwork.agent import Agent

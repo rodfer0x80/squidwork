@@ -5,8 +5,8 @@ import os
 from typing import Union, List
 
 class SMTPController:
-  def __init__(self, email) -> None:
-    self.email = email
+  def __init__(self, user_email) -> None:
+    self.email = user_email
     return None
 
   def _send(self, to: str, subject: str, content: str):
@@ -39,12 +39,12 @@ class GmailController(SMTPController):
   PROVIDER = 'Gmail'
 
   def __init__(self, user_email, user_email_password) -> None:
-    super().__init__(email)
+    super().__init__(user_email)
     self.user_email = user_email
     self.user_email_passwd = user_email_password
 
     if self.user_email == None or self.user_email_passwd == None:
-      raise Exception("Account credentials not defined in environment variables")
+      raise Exception("Account credentials not defined")
 
     self.server = smtplib.SMTP('smtp.gmail.com:587')
     self.server.ehlo(self.PROVIDER)
