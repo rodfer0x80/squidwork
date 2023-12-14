@@ -33,5 +33,6 @@
 ...
 ### smart music assistant search and local play
 ...
-### ext
+### models
 [ ] write smart templates, later gpt write/adapt templates?
+[ ] add python support to call models in cli so we can add any models input->model->output, all we do is support and extensions, we call it with a subprocess (optimised ones too?) 
