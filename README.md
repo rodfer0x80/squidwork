@@ -34,5 +34,7 @@
 ### smart music assistant search and local play
 ...
 ### models
-[ ] write smart templates, later gpt write/adapt templates?
-[ ] add python support to call models in cli so we can add any models input->model->output, all we do is support and extensions, we call it with a subprocess (optimised ones too?) 
+[ ] models take stdin, pass to call prompt/input_tts/input_speech in string format
+[ ] add other configs in __main__ so, later we can add small logic user-side to config each model from runner file so they dont need to touch source models to config, now do the pipe logic in a couple of lines input->model->output; new models should be easy to add, just make cli model (e.g. tinygrad models are all cli models) pass args to cli call and pipe and install reqs
+[ ] add requirements to install only when using specific models pip install -r requirements/gpt2.txt
+[ ] add behaviours for diff models, eg get txt, speech to pass to cli models in tinygrad
