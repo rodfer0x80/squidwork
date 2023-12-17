@@ -61,7 +61,7 @@ class Actions:
     #             break  # Exit the loop when the bottom of the page is reached
 
     # TODO: this is broken btw fix it later
-    def scrollBy(self, x:int=0, y:int=0):
+    def scroll_by(self, x:int=0, y:int=0):
         # iframe = driver.find_element_by_id('iframe-id')  # Replace with the iframe's ID
         # driver.switch_to.frame(iframe)
         try:

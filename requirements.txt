@@ -1,16 +1,8 @@
 requests
 selenium
 beautifulsoup4
-openai-whisper
 sounddevice
-pyaudio
-numpy
-nltk
-pygame
 py-pdf-parser
 google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
-sentencepiece
-phonemizer
-unidecode
