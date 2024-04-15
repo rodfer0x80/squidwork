@@ -12,7 +12,7 @@ class Driver:
     def init(self):
         raise("Not implemented")
 
-    def getBrowser(self):
+    def get_browser(self):
         return self.browser
     
     def enableInsecureOptions(self):

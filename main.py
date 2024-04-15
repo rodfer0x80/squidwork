@@ -15,12 +15,15 @@ class mainAgent(Agent):
         self.openGoogle()
 
     def openGoogle(self):
-        search_text = input("Search: ")
+        search_text = "who let the dogs out"#input("Search: ")
         self.actions.get_url("https://google.com")
+        self.actions.cookies.import_cookies("google")
         self.actions.scroll_by(200)
-        self.actions.click(("id", "L2AGLb"))
+        self.actions.click(("id", "L2AGLb"), timeout=2)
         self.actions.type(("id", "APjFqb"), search_text, send=True)
-        time.sleep(10)
+        self.actions.export_cookies("google")
+        time.sleep(3)
+    
 
 
 def main():

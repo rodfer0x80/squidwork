@@ -1,20 +1,13 @@
 # squidwork
 <p>why work we so fly</p>
 
-## Goals
-<p> Readability</p>
-<p> Ease of integration</p>
-<p> Ease of expansion and development of cool assistants/bots </p>
-<p> Git gud, big boi project architecture and maintenance, get programming skillz </p>
-<p> Just kidding, the only goal is to impress random girls in coffee shops as apparently colourful text spam on a laptop screen isn't "attractive" - "look what my AI can do" will become the best pick up line of 2024</p>
-
 ## TODO
 ### Talk with VAL
+[ ] dockerize actions
 [ ] move whisper template to actions call to listen and parse
 [ ] move tts to actions call to talk from input
 [ ] move openai whisper to tinygrad local whisper
 [ ] move tts firefox to tinygrad tts (from conversation.py)
-[ ] make own tinygpt or mamba? : template
 [ ] move gpt/mamba template to actions brain parser? freeBing3.5 template->brain code 1 shot?
 [ ] part VAL to own project depending on squidwork
 [ ] document this shit on blog and stuffs? ...

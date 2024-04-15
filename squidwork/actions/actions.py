@@ -14,17 +14,24 @@ from requests.exceptions import RequestException
 from typing import Union, List, Tuple, Dict
 import time
 
-from squidwork.actions.smtpc import GmailController
+from squidwork.actions.protocols.smtpc import GmailController
+from squidwork.cookies.cookies import Cookies
 
 class Actions:
-    def __init__(self, browser, logger, user_email_creds:Dict[str,str]=None):
+    def __init__(self, browser, logger, cache_dir, user_email_creds:Dict[str,str]=None):
+        self.cache_dir = cache_dir
         self.browser = browser
         self.logger = logger
         self.user_email = user_email_creds["user_email"] 
         self.user_email_password = user_email_creds["user_email_password"] 
-    
+        self.cookies = Cookies(self.cache_dir, self.logger, self.browser)
+
     def close(self):
         self.browser.close()
+
+    def get_cookies(self): return self.cookies.get_cookies()
+    def import_cookies(self, filename="cookies.pkl"): return self.cookies.import_cookies(filename)
+    def export_cookies(self, filename="cookies.pkl"): return self.cookies.export_cookies(filename)
 
     # hack for 'or' clause for expected_conditions
     def any_expected_condition(self, *cons):
@@ -66,15 +73,15 @@ class Actions:
         # driver.switch_to.frame(iframe)
         try:
             self.browser.execute_script(f"window.scrollBy({x}, {y});")
-            self.logger.info(f"Scrolled by {x}, {y}")
+            self.logger.info(f"actions.py:77 - Scrolled by {x}, {y}")
         except WebDriverException as e:
-            self.logger.error(f"WebDriverException: {e}")
+            self.logger.error(f"actions.py:77 - WebDriverException: {e}")
     def scroll_to(self, element):
         try:
             self.browser.execute_script("arguments[0].scrollIntoView(true);", element)
             self.logger.info(f"Scrolled to {element}")
         except WebDriverException as e:
-            self.logger.error(f"WebDriverException: {e}")
+            self.logger.error(f"actions.py:83 - WebDriverException: {e}")
     def scroll(self, n:int=1):
         try:
             for _ in range(n):
@@ -82,7 +89,7 @@ class Actions:
                 body.send_keys(Keys.PAGE_DOWN)
             self.logger.info(f"Scrolled {n} times")
         except WebDriverException as e:
-            self.logger.error(f"WebDriverException: {e}")
+            self.logger.error(f"actions.py:91 - WebDriverException: {e}")
 
     def wait(self, by_value: Tuple[str, str], timeout:float=8.0):
         try:
@@ -90,24 +97,28 @@ class Actions:
                 expected_conditions.presence_of_element_located(by_value)
             )
         except TimeoutException:
-            self.logger.error(f'Timeout: {by_value[0]} not found by {by_value[1]}')
+            self.logger.error(f'actions.py:99 - Timeout: {by_value[0]} not found by {by_value[1]}')
             return None
 
     # this two can probly be shorter
     def click(self, by_value: Tuple[str, str], timeout:float=4.0, slow:Tuple[bool, float]=(False, 1)):
         time.sleep(0.1)
+        by = by_value[0]
         by = "css_selector" if by_value[0] == "css" else by_value[0]
         by = "class_name" if by_value[0] == "class" else by_value[0]
         by_value = (getattr(By, by.upper()), by_value[1])
         try:
             element = self.wait(by_value, timeout)
-            assert element is not None, f"Element not found: {by_value[0]}: {by_value[1]}"
+            if element is None: return 2
+            #assert element is not None, f"Element not found: {by_value[0]}: {by_value[1]}"
             actions = ActionChains(self.browser).move_to_element(element)
             actions.pause(slow[1]) if slow[0] else None
             actions.click().perform()
             self.logger.info(f"buttonClickBy{by_value[0]}{'Slow' if slow else ''} clicked {by_value[1]}")
+            return 0
         except WebDriverException as e:
-            self.logger.error(f"WebDriverException: {e}")
+            self.logger.error(f"actions.py:118 - WebDriverException: {e}")
+            return 1
 
     def type(self, by_value:Tuple[str,str], keys:str, send=False,timeout:float=4.0):
         time.sleep(0.1)
@@ -116,7 +127,8 @@ class Actions:
         by_value = (getattr(By, by.upper()), by_value[1])
         try:
             element = self.wait(by_value, timeout)
-            assert element is not None, f"Element not found: {by_value[0]}: {by_value[1]}"
+            #assert element is not None, f"Element not found: {by_value[0]}: {by_value[1]}"
+            if element is None: return 2
             actions = ActionChains(self.browser).move_to_element(element).pause(1)
             actions.click().perform()
             element.clear()
@@ -124,8 +136,10 @@ class Actions:
             if send:
               element.send_keys(Keys.RETURN)
             self.logger.info(f"sendKeysBy{by_value[0]} sent keys to {by_value[1]}")
+            return 0
         except WebDriverException as e:
-            self.logger.error(f"WebDriverException: {e}")
+            self.logger.error(f"actions.py:136 - WebDriverException: {e}")
+            return 1
 
     def wait_by_page_url(self, url:str, timeout:float=8.0):
         response = requests.get(url)
@@ -136,7 +150,7 @@ class Actions:
                 WebDriverWait(self.browser, timeout).until(expected_conditions.title_is(title))
                 self.logger.info(f"waitByPage found {title} in page")
             except WebDriverException as e:
-                self.logger.error(f"WebDriverException: {e}")
+                self.logger.error(f"actions.py:147 - WebDriverException: {e}")
 
     def element_has_class(self, element, class_name:str):
         try:
@@ -144,7 +158,7 @@ class Actions:
             self.logger.info(f"Found {class_name} in {element}")
             return ret
         except WebDriverException as e:
-            self.logger.error(f"WebDriverException: {e}")
+            self.logger.error(f"actions.py:155 - WebDriverException: {e}")
 
     def get_url(self, url: str):
         try:
@@ -152,7 +166,7 @@ class Actions:
             self.logger.info(f"Successfully fetched {url}")
             self.wait_by_page_url(url)
         except WebDriverException as e:
-            self.logger.error(f"WebDriverException: {e}")
+            self.logger.error(f"actions.py:163 - WebDriverException: {e}")
 
     def request(self, url:str, method:str="GET", **kwargs) -> requests.Response:
         try:
@@ -165,7 +179,7 @@ class Actions:
                 self.logger.error(f"Request failed with status code: {response.status_code}")
                 return None
         except RequestException as e:
-            self.logger.error(f"RequestException: {e}")
+            self.logger.error(f"actions.py:176 - RequestException: {e}")
             return None
         
     def send_email(self, to: Union[List, str], subject: str, content: str, provider:str="gmail"):
@@ -180,4 +194,4 @@ class Actions:
             # del mailc
             self.logger.info(mail_log)
         except WebDriverException as e:
-            self.logger.error(f"WebDriverException: {e}")
+            self.logger.error(f"actioms.py:191 - WebDriverException: {e}")

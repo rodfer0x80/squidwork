@@ -21,18 +21,22 @@ class DefaultChromeDriver(Driver):
         )
         driver.maximize_window()
         return driver
-
+  
     def enableAutomationOptions(self):
         self.options.add_experimental_option(
             "excludeSwitches", ["enable-automation", "enable-logging"]
         )
+        self.options.add_argument("--no-sandbox")
         self.options.add_argument("--disable-dev-shm-usage") # dont touch this breaks user perms
+        
         self.options.add_argument('--disable-blink-features=AutomationControlled')
         self.options.add_experimental_option('useAutomationExtension', False)
         self.options.add_experimental_option("excludeSwitches", ["enable-automation"])
         self.options.add_argument("--disable-notifications")
-        self.options.add_argument("--disable-logging")
-        self.options.add_argument("--silent")
+        
+        #self.options.add_argument("--disable-logging")
+        #self.options.add_argument("--silent")
+        self.options.add_argument("--verbose")
         self.options.add_argument("disable-infobars")
         self.options.add_argument("--disable-crash-reporter")
         self.options.add_argument('--ignore-ssl-errors=yes')
