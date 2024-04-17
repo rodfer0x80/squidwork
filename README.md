@@ -11,6 +11,7 @@
 [ ] move gpt/mamba template to actions brain parser? freeBing3.5 template->brain code 1 shot?
 [ ] part VAL to own project depending on squidwork
 [ ] document this shit on blog and stuffs? ...
+[ ] bypass cloudflare scrape shield https://developers.cloudflare.com/waf/tools/scrape-shield/
 ### Send voice emails, social media posts/comments, texts and call VOIP extension
 ...
 ### rig giveaways to get a drone and some gpus

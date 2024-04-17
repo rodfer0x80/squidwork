@@ -1,6 +1,3 @@
-from typing import Any
-
-
 from squidwork.logger.logger_to_stdout import LoggerToStdout
 from squidwork.logger.logger_to_logfile import LoggerToLogfile
 

@@ -8,10 +8,10 @@ class Cookies:
     self.logger = logger
     self.browser = browser
 
-  def get_cookies(self):
+  def get(self):
     return self.browser.get_cookies()
 
-  def import_cookies(self, filename):
+  def import_pkl(self, filename):
     try:
       with open(os.path.join(self.cache_dir, filename+".pkl"), 'rb') as fp:
         cookies = pickle.load(fp)
@@ -23,7 +23,7 @@ class Cookies:
       return 1  
     return 0  
 
-  def export_cookies(self, filename):
+  def export_pkl(self, filename):
     try:
       with open(os.path.join(self.cache_dir, filename+".pkl"), 'wb') as fp:
         pickle.dump(self.browser.get_cookies(), fp)

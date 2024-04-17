@@ -1,3 +1,3 @@
-from .logger_to_logfile import LoggerToLogfile
-from .logger_to_stdout import LoggerToStdout
-from .logger_factory import LoggerFactory
+from squidwork.logger.logger_to_logfile import LoggerToLogfile
+from squidwork.logger.logger_to_stdout import LoggerToStdout
+from squidwork.logger.logger_factory import LoggerFactory

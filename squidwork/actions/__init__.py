@@ -1,1 +1,1 @@
-from .actions import Actions
+from squidwork.actions.actions import Actions

@@ -1,2 +1,2 @@
-from .smtpc import SMTPController
-from .smtpc import GmailController
+from squidwork.actions.protocols.smtpc import SMTPController
+from squidwork.actions.protocols.smtpc import GmailController
